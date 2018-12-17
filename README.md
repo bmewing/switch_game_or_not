@@ -1,5 +1,5 @@
-# switch_game_or_not
-Python code to generate fake Nintendo Switch game names and a dockerized node.js app to run the game
+# Switch Game or Not?
+Python code to generate fake Nintendo Switch(r) game names and a dockerized node.js app to run the game
 
 ## Dockerization guide
 https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
