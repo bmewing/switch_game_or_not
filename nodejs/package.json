@@ -1,0 +1,13 @@
+{
+  "name": "switch_or_not",
+  "version": "1.0.0",
+  "description": "A markov chain enabled version of the CAGCast game, Switch Game or Not",
+  "author": "Mark Ewing <b.mark@ewingsonline.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
