@@ -38,5 +38,25 @@ for k in known:
 for i in next_letter.keys():
     next_letter[i] = calc_percent(next_letter[i])
 
-with open("markov_probabilities.json", 'w') as outfile:
+with open("markov_probabilities_3.json", 'w') as outfile:
+    json.dump(next_letter, outfile)
+
+next_letter = {}
+for k in known:
+    next_letter = parse_name(k, 4, next_letter)
+
+for i in next_letter.keys():
+    next_letter[i] = calc_percent(next_letter[i])
+
+with open("markov_probabilities_4.json", 'w') as outfile:
+    json.dump(next_letter, outfile)
+
+next_letter = {}
+for k in known:
+    next_letter = parse_name(k, 5, next_letter)
+
+for i in next_letter.keys():
+    next_letter[i] = calc_percent(next_letter[i])
+
+with open("markov_probabilities_5.json", 'w') as outfile:
     json.dump(next_letter, outfile)
