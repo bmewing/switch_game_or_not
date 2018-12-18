@@ -1,6 +1,9 @@
-import csv
+#!/usr/bin/python3
+
+import pymysql
 from collections import Counter
 from functools import reduce
+import re
 import json
 
 
@@ -26,37 +29,38 @@ def calc_percent(n):
     return output
 
 
-known = []
-with open('switch_games.csv', newline='') as csvf:
-    reader = csv.DictReader(csvf)
-    known = [r['title'] for r in reader]
+def fetch_games(conn):
+    db = pymysql.connect(conn['host'], conn['user'], conn['password'], conn['database'])
+    cursor = db.cursor()
+    sql = "SELECT game FROM games;"
+    known = []
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        known = [r[0] for r in results]
+    except:
+        print("Error, unable to fetch data")
+    return known
 
-next_letter = {}
-for k in known:
-    next_letter = parse_name(k, 3, next_letter)
 
-for i in next_letter.keys():
-    next_letter[i] = calc_percent(next_letter[i])
+def gen_markov(known, n):
+    next_letter = {}
+    for k in known:
+        k = re.sub("[\*\(\)]", "", k)
+        next_letter = parse_name(k, n, next_letter)
 
-with open("markov_probabilities_3.json", 'w') as outfile:
-    json.dump(next_letter, outfile)
+    for i in next_letter.keys():
+        next_letter[i] = calc_percent(next_letter[i])
 
-next_letter = {}
-for k in known:
-    next_letter = parse_name(k, 4, next_letter)
+    with open("markov_probabilities_{}.json".format(str(n)), 'w') as outfile:
+        json.dump(next_letter, outfile, indent=4, sort_keys=True)
+    return 0
 
-for i in next_letter.keys():
-    next_letter[i] = calc_percent(next_letter[i])
 
-with open("markov_probabilities_4.json", 'w') as outfile:
-    json.dump(next_letter, outfile)
+with open('../nodejs/src/mysql.json') as f:
+    mysql_conn = json.load(f)
 
-next_letter = {}
-for k in known:
-    next_letter = parse_name(k, 5, next_letter)
+known_games = fetch_games(mysql_conn)
+_ = gen_markov(known_games, 3)
+_ = gen_markov(known_games, 4)
 
-for i in next_letter.keys():
-    next_letter[i] = calc_percent(next_letter[i])
-
-with open("markov_probabilities_5.json", 'w') as outfile:
-    json.dump(next_letter, outfile)
