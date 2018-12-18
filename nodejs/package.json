@@ -5,11 +5,23 @@
   "author": "Mark Ewing <b.mark@ewingsonline.com>",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "./node_modules/.bin/babel src --out-dir ./"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmewing/switch_game_or_not.git"
   },
   "dependencies": {
     "express": "^4.16.1",
     "mysql": "^2.5.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "body-parser": "^1.18.2"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-cli": "^6.26.0"
   }
 }

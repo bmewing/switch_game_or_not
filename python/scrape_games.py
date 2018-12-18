@@ -17,8 +17,8 @@ with open('../nodejs/src/mysql.json') as f:
     mysql_conn = json.load(f)
 
 
-def last_thursday():
-    today = datetime.strptime(str(date.today()),"%Y-%m-%d")
+def last_thursday(ref = date.today()):
+    today = datetime.strptime(str(ref),"%Y-%m-%d")
     dow = today.weekday()
     if dow == 4:
         return today
@@ -32,10 +32,10 @@ def write_to_mysql(week_id, week, game, conn):
     db = pymysql.connect(conn['host'], conn['user'], conn['password'], conn['database'])
     cursor = db.cursor()
     sql = """REPLACE INTO games
-            (week_id,week,game,real_game,method)
-            VALUES ({},'{}','{}',{},'{}');"""
+            (week_id,week,game)
+            VALUES ({},'{}','{}');"""
     try:
-        cursor.execute(sql.format(week_id, week, game, 1, ''))
+        cursor.execute(sql.format(week_id, week, game))
         db.commit()
     except:
         print("SOMETHING HAPPENED! "+title)
@@ -49,7 +49,7 @@ def extract_game(g, conn):
         odate = datetime(2017, 3, 2, 0, 0)
         week_id = math.floor((rdate - odate).days / 7)
         release = str(rdate)[:10]
-        week = datetime.strptime(release,'%Y-%m-%d').strftime("%b %e, %Y")
+        week = str(last_thursday(release))[:10]
         title = re.sub("'","''", g['title'])
         title = re.sub('"', "''", title)
         title = re.sub("&[^ ]*?;", "", title)
