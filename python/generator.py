@@ -14,10 +14,10 @@ def choose_letter(s):
 
 
 def gen_title(title, n):
-    go = True
-    while go:
+    keep_going = True
+    while keep_going:
         if title[-n:] == "`"*n:
-            go = False
+            keep_going = False
         else:
             title = title + choose_letter(title[-n:])
     return title[n:-n]
@@ -25,11 +25,11 @@ def gen_title(title, n):
 
 def check_name(name, known):
     result = False
-    if name in known_games:
+    if name in known:
         result = True
-    if any([True for k in known_games if re.search(name, k)]):
+    if any([True for k in known if re.search(name, k)]):
         result = True
-    return(result)
+    return result
 
 
 if __name__ == "__main__":
@@ -46,6 +46,7 @@ if __name__ == "__main__":
     fake_games = []
     while fake_games.__len__() < 100:
         go = True
+        out = ""
         while go:
             out = gen_title(start, memory_length)
             if check_name(out, known_games):
