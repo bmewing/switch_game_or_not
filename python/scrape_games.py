@@ -20,22 +20,22 @@ with open('../nodejs/mysql.json') as f:
 def last_thursday(ref = date.today()):
     today = datetime.strptime(str(ref),"%Y-%m-%d")
     dow = today.weekday()
-    if dow == 4:
+    if dow == 3:
         return today
-    elif dow > 4:
-        return today - timedelta(days = dow-4)
+    elif dow > 3:
+        return today - timedelta(days = dow-3)
     else:
         return today - timedelta(days = dow+4)
 
 
-def write_to_mysql(week_id, week, game, conn):
+def write_to_mysql(week_id, week, game, release, conn):
     db = pymysql.connect(conn['host'], conn['user'], conn['password'], conn['database'])
     cursor = db.cursor()
     sql = """REPLACE INTO games
-            (week_id,week,game)
-            VALUES ({},'{}','{}');"""
+            (week_id,week,game,release_date)
+            VALUES ({},'{}','{}','{}');"""
     try:
-        cursor.execute(sql.format(week_id, week, game))
+        cursor.execute(sql.format(week_id, week, game, release))
         db.commit()
     except:
         print("SOMETHING HAPPENED! "+title)
@@ -56,7 +56,7 @@ def extract_game(g, conn):
         title = re.sub("é", "e", title)
         title = re.sub("®", "", title)
         title = re.sub("Û", "U", title)
-        write_to_mysql(week_id, week, title, conn)
+        write_to_mysql(week_id, week, title, release, conn)
         if rdate < last_thursday():
             return 1
         else:
