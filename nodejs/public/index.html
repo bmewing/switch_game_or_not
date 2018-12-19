@@ -2,13 +2,64 @@
     <head>
         <script src="//code.angularjs.org/1.6.7/angular.js"></script>
         <script src="http://switchgameornot.com/game.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131185719-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-131185719-1');
+        </script>
+
         <title>Switch Game or Not?</title>
+        <style>
+            ul {
+                -moz-column-count: 4;
+                -moz-column-gap: 20px;
+                -webkit-column-count: 4;
+                -webkit-column-gap: 20px;
+                column-count: 2;
+                column-gap: 20px;
+                text-align: left;
+                list-style-type: none;
+            }
+        </style>
     </head>
     <body>
         <center>
-            <img src="http://switchgameornot.com/logo-med.png">
-            <h1>
-            Coming Soon!
-            </h1>
+            <img src="http://switchgameornot.com/logo-med.png" height="25%"/>
+            <div class="container" ng-app="switch_or_not" ng-controller="playController">
+                <div class="row">
+                    <h1>Let's Play!</h1>
+                    There are between 3 and 7 fake games hidden in the list of games that released in a given week.
+                    <br>
+                    <br>
+                    <form class="form" ng-submit="score_submission()">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="week">Select Release Week:</label>
+                                <select class="form-control" id="week" ng-model="week.selected" ng-change="get_selected_week()" required>
+                                    <option ng-repeat="w in weeks" value="{{w}}">{{w}}</option>
+                                </select>
+                                <br>
+                                <p ng-bind-html="score | unsafe"></p>
+                                <br>
+                                <fieldset>
+                                    <legend>Find the fake Switch games!</legend>
+                                    <ul>
+                                        <li ng-repeat="game in games">
+                                            <input type="checkbox" ng-model="selected[game.game_id]">{{game.game}}
+                                        </li>
+                                    </ul>
+                                </fieldset>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg">Submit Guesses</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </center>
     </body>

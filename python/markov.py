@@ -57,10 +57,10 @@ def gen_markov(known, n):
     return 0
 
 
-with open('../nodejs/src/mysql.json') as f:
+with open('../nodejs/mysql.json') as f:
     mysql_conn = json.load(f)
 
-known_games = fetch_games(mysql_conn)
+known_games = fetch_games(mysql_conn['writer'])
 _ = gen_markov(known_games, 3)
 _ = gen_markov(known_games, 4)
 

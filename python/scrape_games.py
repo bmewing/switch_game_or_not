@@ -13,7 +13,7 @@ from datetime import datetime, date, timedelta
 odate = datetime(2017, 3, 2, 0, 0)
 thisweek = math.floor((datetime.today() - odate).days / 7)
 
-with open('../nodejs/src/mysql.json') as f:
+with open('../nodejs/mysql.json') as f:
     mysql_conn = json.load(f)
 
 
@@ -72,7 +72,7 @@ while go:
     page = requests.get(u.format(str(i*40)))
     data = json.loads(page.content.decode('utf-8'))
     games = data['games']['game']
-    res = [extract_game(g, mysql_conn) for g in games]
+    res = [extract_game(g, mysql_conn['writer']) for g in games]
     go = functools.reduce(lambda a, b: a+b, res) == 0
     i += 1
     time.sleep(3)

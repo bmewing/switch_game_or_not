@@ -63,14 +63,28 @@ def write_to_mysql(game, method, db):
         db.rollback()
 
 
+def fetch_fakes(conn):
+    db = pymysql.connect(conn['host'], conn['user'], conn['password'], conn['database'])
+    cursor = db.cursor()
+    sql = "SELECT game FROM fake_games;"
+    known = []
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        known = [r[0] for r in results]
+    except:
+        print("Error, unable to fetch data")
+    return known
+        
+        
 if __name__ == "__main__":
-    with open('../nodejs/src/mysql.json') as f:
+    with open('../nodejs/mysql.json') as f:
         mysql_conn = json.load(f)
-    known_games = fetch_games(mysql_conn)
-    db = pymysql.connect(mysql_conn['host'], 
-                         mysql_conn['user'], 
-                         mysql_conn['password'], 
-                         mysql_conn['database'])
+    known_games = fetch_games(mysql_conn['reader'])
+    db = pymysql.connect(mysql_conn['writer']['host'], 
+                         mysql_conn['writer']['user'], 
+                         mysql_conn['writer']['password'], 
+                         mysql_conn['writer']['database'])
     
     memory_length = 4
 
@@ -78,7 +92,7 @@ if __name__ == "__main__":
         probs = json.load(jsonfile)
 
     start = '*' * memory_length
-    fake_game_list = ['']
+    fake_game_list = fetch_fakes(mysql_conn['reader'])
     while fake_game_list.__len__() < 1000:
         go = True
         out = ""
