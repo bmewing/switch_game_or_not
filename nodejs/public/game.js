@@ -14,6 +14,17 @@
         
         $scope.selected = {}
         $scope.score = ""
+        $scope.affiliate = ""
+        
+        getAffiliate()
+        
+        function getAffiliate(){
+            $http.get('/api/titles/affiliate/text')
+            .then(function(data){
+                console.log(data.data)
+                $scope.affiliate = data.data + " That's an affiliate link that supports the cost of hosting this game."
+            })
+        }
         
         function getWeeks(){
             $http.get('/api/titles')
@@ -22,8 +33,19 @@
             })
         }
         
-        function generate_score(fake, selected, all){
+        function process_selected(selected){
             var sel_id = Object.keys(selected)
+            var output = []
+            for(var i=0; i < sel_id.length; i++){
+                if(selected[sel_id[i]]){
+                    output.push(sel_id[i])
+                }
+            }
+            return(output)
+        }
+        
+        function generate_score(fake, selected, all){
+            var sel_id = process_selected(selected)
             var n = sel_id.length
             var true_pos = []
             var false_pos = []
@@ -31,10 +53,13 @@
             for(var i=0; i < n; i++){
                 var curr = sel_id[i]
                 if(fake.indexOf(curr) > -1){
-                    true_pos.push(curr)
+                    for(var m=0; m<all.length; m++){
+                        if(all[m].game_id == curr){
+                            true_pos.push(all[m].game)
+                        }
+                    }
                 } else {
                     for(var k=0; k<all.length; k++){
-                        console.log(all[k].game_id)
                         if(all[k].game_id == curr){
                             false_pos.push(all[k].game)
                         }
@@ -56,7 +81,14 @@
             if(true_pos.length == fake.length){
                 lead = "<h3>Wow!<h3>"
             }
-            var output = lead+"<strong>You correctly found <big>"+true_pos.length+" of the "+fake.length+"</big> fake games hidden in this week's releases!</strong>"
+            if(true_pos.length === 0){
+                lead = "<h3>Oh, well!</h3>"
+            }
+            var output = lead+"<strong>You correctly found <big>"+true_pos.length+" of the "+fake.length+"</big> fake games hidden in this week's releases!"
+            if(true_pos.length > 0){
+                output += "<br>"+true_pos.join('<br>')
+            }
+            output += "</strong>"
             if(false_pos.length > 0){
                 output += "<br><br><em>Real games you thought were fake:</em><br>"+false_pos.join('<br>')
             }
@@ -94,7 +126,7 @@
         }
         
         function prep_data(games, guess, fake){
-            var guesses = Object.keys(guess)
+            var guesses = process_selected(guess)
             var output = []
             for(var i=0; i < games.length; i++){
                 var tmp = games[i]

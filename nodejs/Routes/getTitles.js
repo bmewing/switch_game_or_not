@@ -64,4 +64,14 @@ titleRouter.route('/:week').get(function (req, res) {
     }));
 });
 
+titleRouter.route('/affiliate/text').get(function (req, res) {
+    var q = 'select msg from affiliate where active = 1 order by rand() limit 1;';
+    pool.query(q, function (err, rows) {
+        if (err) {
+            res.status(100).send(err);
+        }
+        res.json(rows[0].msg);
+    });
+});
+
 exports.default = titleRouter;

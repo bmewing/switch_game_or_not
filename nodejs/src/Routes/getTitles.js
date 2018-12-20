@@ -50,4 +50,15 @@ titleRouter.route('/:week')
     res.json(games.sort(function(a,b){return 0.5 - Math.random()}));
   })
 
+titleRouter.route('/affiliate/text')
+    .get((req,res)=>{
+        var q = 'select msg from affiliate where active = 1 order by rand() limit 1;';
+        pool.query(q,(err,rows) => {
+            if(err){
+                res.status(100).send(err);
+            }
+            res.json(rows[0].msg);
+        })
+    })
+
 export default titleRouter

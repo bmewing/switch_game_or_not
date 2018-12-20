@@ -33,8 +33,7 @@
                 <div class="row">
                     <h1>Let's Play!</h1>
                     There are between 3 and 7 fake games hidden in the list of games that released in a given week.<br>
-                    <small>Thanks for playing! I've really enjoyed <a target="_blank" href="https://www.amazon.com/gp/product/B01N7RE3HB/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B01N7RE3HB&linkCode=as2&tag=bmewing-20&linkId=74958a5a72f86b6d87d105070964f2fa">Pokemon: Let's Go, Eevee!</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=bmewing-20&l=am2&o=1&a=B01N7RE3HB" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-                     on the Switch and you could to. That's an affiliate link that supports the cost of hosting this game.</small>
+                    <small> <p ng-bind-html="affiliate | unsafe"></p></small>
                     <br>
                     <br>
                     <form class="form" ng-submit="score_submission()">
@@ -44,9 +43,7 @@
                                 <select class="form-control" id="week" ng-model="week.selected" ng-change="get_selected_week()" required>
                                     <option ng-repeat="w in weeks" value="{{w}}">{{w}}</option>
                                 </select>
-                                <br>
                                 <p ng-bind-html="score | unsafe"></p>
-                                <br>
                                 <fieldset>
                                     <legend>Find the fake Switch games!</legend>
                                     <ul>
@@ -62,6 +59,18 @@
                         </div>
                     </form>
                 </div>
+                <hr>
+                <p>
+                    You might be wondering what the heck this is all about. I'm a big fan of the 
+                <a href='https://www.cheapassgamer.com/forum/55-cagcast-video-game-podcast/' target='_blank'>CAGCast</a> Podcast hosted by CheapyD, Wombat and Shipwreck. 
+                Sometime in 2018 they started a segment called 'Switch Game or Not' where CheapyD would take the current week's new releases and insert fake game names. 
+                I thought it would be fun to build a simple AI bot to generate fake Switch names and formalize it into a website. If you want, you can see the code for 
+                the project on <a href='https://github.com/bmewing/switch_game_or_not' target='_blank'>my GitHub repo</a> and feel free to follow me on Twitter 
+                <a href='https://twitter.com/pofigster' target='_blank'>@pofigster</a>.
+                </p>
+                <p>
+                    Copyright 2018, Mark Ewing
+                </p>
             </div>
         </center>
     </body>
