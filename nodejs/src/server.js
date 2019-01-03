@@ -4,6 +4,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import titleRouter from './Routes/getTitles.js'
 import scoreRouter from './Routes/getScores.js'
+import alexaRouter from './Routes/getAlexa.js'
 
 // Constants
 const PORT = 8080;
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/titles',titleRouter)
 app.use('/api/scores',scoreRouter)
+app.use('/api/alexa',alexaRouter)
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {

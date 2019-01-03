@@ -48,7 +48,12 @@ titleRouter.route('/').get(function (req, res) {
 
 titleRouter.use('/:week', function (req, res, next) {
     console.log(req.params.week);
-    var q = '(select week_id, game_id, game, 1 as `real` from games where week="' + req.params.week + '") UNION (select null as `week_id`, game_id, game, 0 as `real` from fake_games order by rand() limit ' + Math.floor(Math.random() * 4 + 3) + ');';
+    var week = req.params.week;
+    var rePattern = new RegExp(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/);
+    if (week.match(rePattern) === null) {
+        week = '2018-12-27';
+    }
+    var q = '(select week_id, game_id, game, 1 as `real` from games where week="' + week + '") UNION (select null as `week_id`, game_id, game, 0 as `real` from fake_games order by rand() limit ' + Math.floor(Math.random() * 4 + 3) + ');';
     pool.query(q, function (err, rows) {
         if (err) {
             res.status(100).send(err);

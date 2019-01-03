@@ -24,6 +24,10 @@ var _getScores = require('./Routes/getScores.js');
 
 var _getScores2 = _interopRequireDefault(_getScores);
 
+var _getAlexa = require('./Routes/getAlexa.js');
+
+var _getAlexa2 = _interopRequireDefault(_getAlexa);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Constants
@@ -36,6 +40,7 @@ app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use('/api/titles', _getTitles2.default);
 app.use('/api/scores', _getScores2.default);
+app.use('/api/alexa', _getAlexa2.default);
 app.use(_express2.default.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
